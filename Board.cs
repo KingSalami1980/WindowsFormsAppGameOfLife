@@ -10,32 +10,32 @@ namespace WindowsFormsAppGameOfLife
     class Board
     {
         private Square[] squares;
-        private int m_count = 16;
-        private int m_squareSize = 15;
-        private int m_topMargin = 40;
+        private int iCount = 16;
+        private int iSquareSize = 15;
+        private int iTopMargin = 40;
 
         public Board(int count, int squareSize, int topMargin)
         {
-            m_count = count;
-            m_squareSize = squareSize;
-            m_topMargin = topMargin;
-            squares = new Square[m_count * m_count];
-            init();
+            iCount = count;
+            iSquareSize = squareSize;
+            iTopMargin = topMargin;
+            squares = new Square[iCount * iCount];
+            Init();
         }
 
-        private void init()
+        private void Init()
         {
-            for (int i = 0; i < (m_count * m_count); i++)
+            for (int i = 0; i < (iCount * iCount); i++)
             {
-                int x = (i % m_count) * (m_squareSize + 1);
-                int y = (i / m_count) * (m_squareSize + 1) + m_topMargin;
-                squares[i] = new Square(new System.Drawing.Point(x, y), m_squareSize);
+                int x = (i % iCount) * (iSquareSize + 1);
+                int y = (i / iCount) * (iSquareSize + 1) + iTopMargin;
+                squares[i] = new Square(new System.Drawing.Point(x, y), iSquareSize);
             }
         }
 
-        public Square square(int i)
+        public Square Square(int i)
         {
-            if (i < (m_count * m_count) && i > -1)
+            if (i < (iCount * iCount) && i > -1)
             {
                 return squares[i];
             }
@@ -47,48 +47,48 @@ namespace WindowsFormsAppGameOfLife
             int s = (int)data;
             while (s > 0)
             {
-                updateSquareState();
-                updateSquareDisplay();
+                UpdateSquareState();
+                UpdateSquareDisplay();
                 s--;
                 Thread.Sleep(100);
             }
         }
 
-        private void updateSquareState()
+        private void UpdateSquareState()
         {
             for (int i = 0; i < squares.Length; i++)
             {
-                int neighbours = getNeighbourCount(i);
+                int neighbours = GetNeighbourCount(i);
                 if (neighbours > 3 || neighbours < 2)
                 {
-                    squares[i].setState(false);
+                    squares[i].SetState(false);
                 }
                 else if (neighbours == 3)
                 {
-                    squares[i].setState(true);
+                    squares[i].SetState(true);
                 }
                 else
                 {
-                    squares[i].setState();
+                    squares[i].SetState();
                 }
             }
         }
 
-        private void updateSquareDisplay()
+        private void UpdateSquareDisplay()
         {
             foreach (Square s in squares)
             {
-                s.updateDisplay();
+                s.UpdateDisplay();
             }
         }
 
-        private int getNeighbourCount(int squareIndex)
+        private int GetNeighbourCount(int squareIndex)
         {
-            int[] neighbours = getNeighbourIndexes(squareIndex);
+            int[] neighbours = GetNeighbourIndexes(squareIndex);
             int neighbourCount = 0;
             foreach (int i in neighbours)
             {
-                if (i >= 0 && i < squares.Length && squares[i].isAlive() && i != squareIndex && Math.Abs((i % m_count) - (squareIndex % m_count)) <= 1)
+                if (i >= 0 && i < squares.Length && squares[i].IsAlive() && i != squareIndex && Math.Abs((i % iCount) - (squareIndex % iCount)) <= 1)
                 {
                     neighbourCount++;
                 }
@@ -97,21 +97,21 @@ namespace WindowsFormsAppGameOfLife
             return neighbourCount;
         }
 
-        private int[] getNeighbourIndexes(int si)
+        private int[] GetNeighbourIndexes(int si)
         {
             int[] index = new int[9];
 
-            index[0] = si - m_count - 1;
-            index[1] = si - m_count;
-            index[2] = si - m_count + 1;
+            index[0] = si - iCount - 1;
+            index[1] = si - iCount;
+            index[2] = si - iCount + 1;
 
             index[3] = si - 1;
             index[4] = si;
             index[5] = si + 1;
 
-            index[6] = si + m_count - 1;
-            index[7] = si + m_count;
-            index[8] = si + m_count + 1;
+            index[6] = si + iCount - 1;
+            index[7] = si + iCount;
+            index[8] = si + iCount + 1;
 
             return index;
         }

@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WindowsFormsAppGameOfLife
@@ -27,6 +21,11 @@ namespace WindowsFormsAppGameOfLife
         public Form1()
         {
             InitializeComponent();
+            GetAndSetDimensions();
+        }
+
+        private void GetAndSetDimensions()
+        {
             int winWidth = (count + 1) * (squareSize + 1);
             this.Width = winWidth;
             int titleHeight = this.Height - this.ClientRectangle.Height;
@@ -42,40 +41,58 @@ namespace WindowsFormsAppGameOfLife
             board = new Board(count, squareSize, topMargin);
             for (int i = 0; i < count * count; i++)
             {
-                this.Controls.Add(board.square(i).panel());
+                this.Controls.Add(board.Square(i).Panel());
             }
 
-            start = new Button();
-            start.Text = "Start";
-            start.Height = topMargin;
-            start.Width = 100;
+            CreateUI();
+        }
+
+        private void CreateUI()
+        {
+            start = new Button
+            {
+                Text = "Start",
+                Height = topMargin,
+                Width = 100
+            };
             start.Click += Start_Click;
             this.Controls.Add(start);
 
-            stop = new Button();
-            stop.Text = "Stop";
-            stop.Height = topMargin;
-            stop.Location = new Point(100, 0);
-            stop.Width = 100;
+            stop = new Button
+            {
+                Text = "Stop",
+                Height = topMargin,
+                Location = new Point(100, 0),
+                Width = 100
+            };
             stop.Click += Stop_Click;
             this.Controls.Add(stop);
 
-            lblSteps = new Label();
-            lblSteps.Height = topMargin;
-            lblSteps.Location = new Point(200, 0);
-            lblSteps.Width = 100;
-            lblSteps.Text = "Number of steps:";
+            lblSteps = new Label
+            {
+                Height = topMargin,
+                Location = new Point(200, 0),
+                Width = 135,
+                Text = "Number of generations:"
+            };
             this.Controls.Add(lblSteps);
 
-            steps = new TextBox();
-            steps.Height = topMargin;
-            steps.Location = new Point(300, 0);
-            steps.Width = 100;
-            steps.Text = "42";
+            steps = new TextBox
+            {
+                Height = topMargin,
+                Location = new Point(335, 0),
+                Width = 45,
+                Text = "1"
+            };
             this.Controls.Add(steps);
         }
 
         private void Start_Click(object sender, EventArgs e)
+        {
+            StartSimulation();
+        }
+
+        private void StartSimulation()
         {
             if (runner == null || !runner.IsAlive)
             {
@@ -100,6 +117,11 @@ namespace WindowsFormsAppGameOfLife
         }
 
         private void Stop_Click(object sender, EventArgs e)
+        {
+            EndSimulation();
+        }
+
+        private void EndSimulation()
         {
             if (runner != null && runner.IsAlive)
             {
